@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentation Viewer</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        img {
+            max-width: 100%;
+            max-height: 70vh;
+            border: 2px solid #000;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .slide-info {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <img id="slide" src="TrigResource/TrigResource.001.png" alt="Slide">
+    <div class="buttons">
+        <button id="firstBtn" onclick="firstSlide()">First Slide</button>
+        <button id="prevBtn" onclick="prevSlide()">Previous Slide</button>
+        <button id="nextBtn" onclick="nextSlide()">Next Slide</button>
+        <button id="lastBtn" onclick="lastSlide()">Last Slide</button>
+    </div>
+    <div class="slide-info">
+        <span id="slide-number">1</span> / <span id="total-slides">4</span>
+    </div>
+
+    <script>
+        const slides = [
+            'TrigResource/TrigResource.001.png',
+            'TrigResource/TrigResource.002.png',
+            'TrigResource/TrigResource.003.png',
+            'TrigResource/TrigResource.004.png',
+            'TrigResource/TrigResource.005.png',
+            'TrigResource/TrigResource.006.png',
+            'TrigResource/TrigResource.007.png',
+            'TrigResource/TrigResource.008.png',
+            'TrigResource/TrigResource.009.png',
+            'TrigResource/TrigResource.010.png',
+            'TrigResource/TrigResource.011.png',
+            'TrigResource/TrigResource.012.png',
+            'TrigResource/TrigResource.013.png',
+            'TrigResource/TrigResource.014.png',
+            'TrigResource/TrigResource.015.png',
+            'TrigResource/TrigResource.016.png',
+            'TrigResource/TrigResource.017.png',
+            'TrigResource/TrigResource.018.png',
+            'TrigResource/TrigResource.019.png',
+            'TrigResource/TrigResource.020.png',
+            'TrigResource/TrigResource.021.png',
+            'TrigResource/TrigResource.022.png',
+            // Add more slide file names here
+        ];
+
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function updateSlide() {
+            document.getElementById('slide').src = slides[currentSlide];
+            document.getElementById('slide-number').textContent = currentSlide + 1;
+            updateButtons();
+        }
+
+        function updateButtons() {
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('firstBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+            document.getElementById('lastBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        function firstSlide() {
+            currentSlide = 0;
+            updateSlide();
+        }
+
+        function lastSlide() {
+            currentSlide = totalSlides - 1;
+            updateSlide();
+        }
+
+        // Initialize buttons on load
+        updateButtons();
+    </script>
+
+</body>
+</html>

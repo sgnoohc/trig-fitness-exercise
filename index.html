@@ -24,6 +24,9 @@
         .selected {
             background-color: #add8e6; /* Light blue background to highlight selection */
         }
+        .correct-answer {
+            background-color: #90EE00;
+        }
         .timer, .score {
             margin: 10px 0;
             font-size: 1.2em;
@@ -35,6 +38,17 @@
             padding: 10px;
             margin: 10px;
             border-radius: 5px;
+        }
+        .buttoncenter {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #next-question {
+            display: none;
+        }
+        #submit-answer {
+            display: block;
         }
     </style>
 </head>
@@ -58,20 +72,21 @@
                 <button id="choice-4" onclick="selectAnswer(5)">x / tan(θ)</button>
                 <br>
                 <br>
-                <button onclick="submitAnswer()">Submit Answer</button>
+                <div class="buttoncenter">
+                    <button id="submit-answer" onclick="submitAnswer()">Submit Answer</button>
+                    <p id="result"></p>
+                    <button id="next-question" onclick="loadNextQuestion()">Next Question</button>
+                </div>
+                <div class="timer">
+                    Time: <span id="timer">0</span> seconds
+                </div>
+                <div class="score">
+                    Score: <span id="correct-count">0</span> correct out of <span id="total-count">0</span>
+                </div>
             </div>
         </div>
     </div>
     <br>
-    <div class="boxed">
-    <p id="result"></p>
-    <div class="timer">
-        Time: <span id="timer">0</span> seconds
-    </div>
-    <div class="score">
-        Score: <span id="correct-count">0</span> correct out of <span id="total-count">0</span>
-    </div>
-    </div>
     <br>
     <button onclick="stopTimer()">Stop Timer</button>
     <br>
@@ -1326,10 +1341,22 @@
             console.log("Correct Answer:", correctAnswer);
         }
 
+        function loadNextQuestion() {
+            clearSelection();
+            document.getElementById("result").textContent = "";
+            loadRandomImage();
+            document.getElementById("next-question").style.display = "none";
+            document.getElementById("submit-answer").style.display = "block";
+        }
+
         function selectAnswer(index) {
             selectedAnswer = index;
             clearSelection();
             document.getElementById(`choice-${index - 1}`).classList.add("selected");
+        }
+
+        function highlightAnswer() {
+            document.getElementById(`choice-${correctAnswer - 1}`).classList.add("correct-answer");
         }
 
         function submitAnswer() {
@@ -1341,12 +1368,16 @@
             if (selectedAnswer === correctAnswer) {
                 correctCount++;
                 document.getElementById("result").textContent = "Correct!";
+                loadNextQuestion();
             } else {
                 document.getElementById("result").textContent = "Incorrect!";
+                clearSelection();
+                highlightAnswer();
+                document.getElementById("next-question").style.display = "block";
+                document.getElementById("submit-answer").style.display = "none";
             }
-            clearSelection();
+            selectedAnswer = null;
             updateScore();
-            loadRandomImage();  // Load a new image after submission
         }
 
         function updateScore() {
@@ -1399,6 +1430,7 @@
         function clearSelection() {
             for (let i = 0; i < 6; i++) {
                 document.getElementById(`choice-${i}`).classList.remove("selected");
+                document.getElementById(`choice-${i}`).classList.remove("correct-answer");
             }
         }
 
